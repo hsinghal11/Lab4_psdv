@@ -62,6 +62,26 @@
       .section {
         margin-bottom: 20px;
       }
+
+      /* Responsive adjustments */
+      @media (max-width: 600px) {
+        body {
+          padding: 10px;
+          font-size: 16px;
+        }
+        header,
+        footer {
+          padding: 8px;
+        }
+        img {
+          margin: 10px auto;
+        }
+        pre,
+        code {
+          font-size: 14px;
+          padding: 8px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -95,7 +115,7 @@
       </article>
 
       <article>
-        <h2>Installation & Setup</h2>
+        <h2>Installation &amp; Setup</h2>
         <p>
           To use D3.js in a simple HTML file, include the D3.js library using:
         </p>
@@ -115,7 +135,7 @@
             Canvas elements dynamically.
           </li>
           <li>
-            <strong>Transitions & Animations:</strong> Smooth animations help in
+            <strong>Transitions &amp; Animations:</strong> Smooth animations help in
             better visualization.
           </li>
           <li>
@@ -230,21 +250,28 @@
             const x = d3.scaleLinear().domain(d3.extent(data, d => d.sepalLength)).nice().range([margin.left, width - margin.right]);
             const y = d3.scaleLinear().domain(d3.extent(data, d => d.sepalWidth)).nice().range([height - margin.bottom, margin.top]);
             
-            svg.append("g").attr("transform", translate(0,${height - margin.bottom})).call(d3.axisBottom(x));
-            svg.append("g").attr("transform", translate(${margin.left},0)).call(d3.axisLeft(y));
+            svg.append("g")
+               .attr("transform", translate(0,${height - margin.bottom}))
+               .call(d3.axisBottom(x));
+            svg.append("g")
+               .attr("transform", translate(${margin.left},0))
+               .call(d3.axisLeft(y));
 
-            svg.append("g").selectAll("circle").data(data).join("circle")
-                .attr("cx", d => x(d.sepalLength))
-                .attr("cy", d => y(d.sepalWidth))
-                .attr("r", 5)
-                .attr("fill", "steelblue")
-                .on("mouseover", (event, d) => {
-                    tooltip.style("visibility", "visible").text(Sepal Length: ${d.sepalLength}, Sepal Width: ${d.sepalWidth});
-                })
-                .on("mousemove", event => {
-                    tooltip.style("top", (event.pageY - 10) + "px").style("left", (event.pageX + 10) + "px");
-                })
-                .on("mouseout", () => tooltip.style("visibility", "hidden"));
+            svg.append("g")
+               .selectAll("circle")
+               .data(data)
+               .join("circle")
+               .attr("cx", d => x(d.sepalLength))
+               .attr("cy", d => y(d.sepalWidth))
+               .attr("r", 5)
+               .attr("fill", "steelblue")
+               .on("mouseover", (event, d) => {
+                   tooltip.style("visibility", "visible").text(Sepal Length: ${d.sepalLength}, Sepal Width: ${d.sepalWidth});
+               })
+               .on("mousemove", event => {
+                   tooltip.style("top", (event.pageY - 10) + "px").style("left", (event.pageX + 10) + "px");
+               })
+               .on("mouseout", () => tooltip.style("visibility", "hidden"));
         }
 
         d3.select("#datasetSelector").on("change", function() {
@@ -255,7 +282,7 @@
     &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-            </code></pre>
+</code></pre>
         <p>Result:</p>
         <img src="images/code.jpg" alt="Dropdown Feature" />
       </article>
@@ -283,8 +310,7 @@
         <div class="section">
           <h3>2. Loading the CSV Dataset</h3>
           <p>
-            D3.js loads the dataset asynchronously, processes it, and calls
-            <code>updateChart</code>.
+            D3.js loads the dataset asynchronously, processes it, and calls updateChart
           </p>
           <code>
             function loadData(file) { d3.csv(file).then(data => { data.forEach(d
@@ -309,8 +335,8 @@
           <h3>4. Adding Axes</h3>
           <p>Axes are appended to the SVG using D3.js functions.</p>
           <code>
-            svg.append("g") .attr("transform", translate(0,${height -
-            margin.bottom})) .call(d3.axisBottom(x)); svg.append("g")
+            svg.append("g") .attr("transform", `translate(0,${height -
+            margin.bottom})`) .call(d3.axisBottom(x)); svg.append("g")
             .attr("transform", translate(${margin.left},0))
             .call(d3.axisLeft(y));
           </code>
@@ -320,11 +346,16 @@
           <h3>5. Drawing Scatter Points</h3>
           <p>Data points are represented using different colors and shapes.</p>
           <code>
-            svg.append("g") .selectAll("path") .data(data) .join("path")
-            .attr("transform", d =>
-            translate(${x(d.sepalLength)},${y(d.sepalWidth)})) .attr("fill", d
-            => color(d.species)) .attr("d", d =>
-            d3.symbol().type(shapeScale(d.species))()) .attr("stroke", "black");
+            svg.append("g") .selectAll("circle") .data(data).join("circle")
+            .attr("cx", d => x(d.sepalLength))
+            .attr("cy", d => y(d.sepalWidth))
+            .attr("r", 5)
+            .attr("fill", "steelblue")
+            .on("mouseover", (event, d) => { tooltip.style("visibility",
+            "visible").text(Sepal Length: ${d.sepalLength}, Sepal Width: ${d.sepalWidth}); })
+            .on("mousemove", event => { tooltip.style("top", (event.pageY - 10) + "px")
+            .style("left", (event.pageX + 10) + "px"); })
+            .on("mouseout", () => tooltip.style("visibility", "hidden"));
           </code>
         </div>
 
@@ -333,11 +364,10 @@
           <p>Tooltips display data values on hover.</p>
           <code>
             .on("mouseover", (event, d) => { tooltip.style("visibility",
-            "visible") .text(Sepal Length: ${d.sepalLength}, Sepal Width:
-            ${d.sepalWidth}); }) .on("mousemove", event => {
-            tooltip.style("top", (event.pageY - 10) + "px") .style("left",
-            (event.pageX + 10) + "px"); }) .on("mouseout", () =>
-            tooltip.style("visibility", "hidden"));
+            "visible").text(Sepal Length: ${d.sepalLength}, Sepal Width: ${d.sepalWidth}); })
+            .on("mousemove", event => { tooltip.style("top", (event.pageY - 10) + "px")
+            .style("left", (event.pageX + 10) + "px"); })
+            .on("mouseout", () => tooltip.style("visibility", "hidden"));
           </code>
         </div>
 
@@ -348,8 +378,9 @@
             const legend = d3.select(".legend") .selectAll(".legend-item")
             .data([...new Set(data.map(d => d.species))]) .join("div")
             .attr("class", "legend-item") .on("click", species => {
-            svg.selectAll("path") .transition().duration(500) .style("opacity",
-            d => d.species === species ? 1 : 0.2); });
+            svg.selectAll("circle") .transition().duration(500)
+            .style("opacity", d => d.species === species ? 1 : 0.2);
+            });
           </code>
         </div>
 
@@ -357,9 +388,9 @@
           <h3>8. Implementing Zoom and Pan</h3>
           <p>Users can zoom and pan using D3.js zoom functions.</p>
           <code>
-            const zoom = d3.zoom() .scaleExtent([1, 10]) .translateExtent([[0,
-            0], [width, height]]) .on("zoom", event => {
-            svg.selectAll("g").attr("transform", event.transform); });
+            const zoom = d3.zoom() .scaleExtent([1, 10])
+            .translateExtent([[0, 0], [width, height]])
+            .on("zoom", event => { svg.selectAll("g").attr("transform", event.transform); });
             svg.call(zoom);
           </code>
         </div>
@@ -371,7 +402,8 @@
           </p>
           <code>
             d3.select("#datasetSelector").on("change", function() {
-            loadData(d3.select(this).property("value")); });
+            loadData(d3.select(this).property("value"));
+          });
           </code>
         </div>
       </article>
@@ -380,23 +412,21 @@
         <h2>Additional Use Cases for D3.js</h2>
 
         <section class="section">
-          <h3>The Wealth & Health of Nations</h3>
+          <h3>The Wealth &amp; Health of Nations</h3>
           <p>
             <strong>Application:</strong> Economic and Health Data Visualization
           </p>
           <p>
             <strong>Example:</strong> It plots per-capita income on the x-axis,
             life expectancy on the y-axis, and population size using the area of
-            bubbles
+            bubbles.
           </p>
-          <img src="./images/wealth.jpg" alt="wealth and Health" />
+          <img src="./images/wealth.jpg" alt="Wealth and Health" />
           <h5>
-            The Wealth & Health of Nations This is a recreation of a Gapminder
+            The Wealth &amp; Health of Nations is a recreation of a Gapminder
             visualization made famous by Hans Rosling. It shows per-capita
             income (x), life expectancy (y) and population (area) of 180 nations
-            over the last 209 years, colored by region. Data prior to 1950 is
-            sparse, so this chart uses bisection and linear interpolation to
-            fill in missing data points.
+            over the last 209 years, colored by region.
           </h5>
         </section>
 
@@ -409,10 +439,10 @@
             over time using interactive visualizations.
           </p>
           <h5>Data: Statistics Iceland via Borgar Þorsteinsson</h5>
-          <img src="./images/population.jpg" alt="population of iceland" />
+          <img src="./images/population.jpg" alt="Population of Iceland" />
           <h5>
-            Icelandic population by age, 1841 - 2019 Blue represents surplus
-            male population and red surplus female population.
+            Icelandic population by age, 1841 - 2019. Blue represents surplus
+            male population and red represents surplus female population.
           </h5>
         </section>
 
@@ -421,13 +451,13 @@
           <p><strong>Application:</strong> Student Performance Tracking</p>
           <p>
             <strong>Example:</strong> Universities and online learning platforms
-            (e.g., Coursera, Khan Academy) use D3.js to visualize student
-            progress, course completion rates, and engagement metrics.
+            use D3.js to visualize student progress, course completion rates, and
+            engagement metrics.
           </p>
         </section>
 
         <section class="section">
-          <h3>Supply Chain & Logistics</h3>
+          <h3>Supply Chain &amp; Logistics</h3>
           <p>
             <strong>Application:</strong> Route Optimization and Shipment
             Tracking
@@ -442,7 +472,7 @@
         <section class="section">
           <h3>Sports Analytics</h3>
           <p>
-            <strong>Application:</strong> Player Performance & Match Statistics
+            <strong>Application:</strong> Player Performance &amp; Match Statistics
           </p>
           <p>
             <strong>Example:</strong> Sports websites and teams use D3.js to
@@ -453,41 +483,39 @@
         </section>
       </article>
       <article>
-    <h2>Conclusion and Final Thoughts on D3.js</h2>
+        <h2>Conclusion and Final Thoughts on D3.js</h2>
 
-    <section class="section">
-        <h3>Overview</h3>
-        <p>D3.js (Data-Driven Documents) is a powerful tool for creating interactive and beautiful data visualizations. It helps developers turn raw data into meaningful charts, graphs, and maps using SVG, HTML, and CSS. Unlike basic chart libraries, D3 gives full control over how data is displayed, making it highly customizable.</p>
-    </section>
+        <section class="section">
+          <h3>Overview</h3>
+          <p>D3.js (Data-Driven Documents) is a powerful tool for creating interactive and beautiful data visualizations. It helps developers turn raw data into meaningful charts, graphs, and maps using SVG, HTML, and CSS. Unlike basic chart libraries, D3 gives full control over how data is displayed, making it highly customizable.</p>
+        </section>
 
-    <section class="section">
-        <h3>Why is D3.js Great?</h3>
-        <ul>
-            <li><strong>✅ Customizable & Flexible:</strong> You can create unique and detailed visualizations, like the Iris dataset scatter plot, where each species has different colors and shapes.</li>
-            <li><strong>✅ Works Well with Data:</strong> D3 easily connects with different data sources, making it great for finance, business, healthcare, and more.</li>
-            <li><strong>✅ Interactive & Engaging:</strong> Features like hover effects, zooming, animations, and tooltips make data easy to understand and fun to explore.</li>
-            <li><strong>✅ Handles Large Data Well:</strong> Whether you're working with small datasets or large-scale analytics, D3 is fast and efficient.</li>
-            <li><strong>✅ Used in Many Fields:</strong> D3 helps with stock market charts, population growth tracking, real-time dashboards, news graphics, and even social media analysis.</li>
-        </ul>
-    </section>
+        <section class="section">
+          <h3>Why is D3.js Great?</h3>
+          <ul>
+            <li><strong>✅ Customizable &amp; Flexible:</strong> You can create unique and detailed visualizations.</li>
+            <li><strong>✅ Works Well with Data:</strong> Easily connects with various data sources.</li>
+            <li><strong>✅ Interactive &amp; Engaging:</strong> Hover effects, zooming, animations, and tooltips make data more accessible.</li>
+            <li><strong>✅ Handles Large Data Well:</strong> Efficiently works with datasets of any size.</li>
+            <li><strong>✅ Widely Applicable:</strong> Used in finance, healthcare, education, and more.</li>
+          </ul>
+        </section>
 
-    <section class="section">
-        <h3>Final Thoughts</h3>
-        <p>D3.js isn’t just a library—it’s a gateway to storytelling with data. It transforms numbers and raw datasets into living, breathing visuals that engage users and provide deep insights. Unlike traditional charting tools, D3 doesn’t limit creativity—it gives developers complete freedom to craft visuals that are as simple or as complex as needed.</p>
-        <p>Yes, D3 has a learning curve, but great things take effort. Once you understand its core concepts, you unlock a world of possibilities—from real-time dashboards that help businesses make better decisions to stunning maps that reveal hidden patterns in global events.</p>
-        <p>If you want to push the boundaries of data visualization and create experiences that make an impact, D3.js is not just a choice—it’s an adventure worth taking.</p>
-    </section>
-</article>
-<article>
-     <section class="section">
-        <h2>References and Further Readings</h2>
-        <ul>
+        <section class="section">
+          <h3>Final Thoughts</h3>
+          <p>D3.js isn’t just a library—it’s a gateway to storytelling with data. It transforms numbers and raw datasets into interactive visuals that engage users and provide deep insights. Although it has a learning curve, mastering D3 unlocks endless possibilities for data visualization.</p>
+        </section>
+      </article>
+      <article>
+        <section class="section">
+          <h2>References and Further Readings</h2>
+          <ul>
             <li><a href="https://d3js.org" target="_blank">D3.js Official Website</a></li>
             <li><a href="https://www.geeksforgeeks.org/d3-js/" target="_blank">D3.js Tutorials - GeeksforGeeks</a></li>
             <li><a href="https://en.wikipedia.org/wiki/D3.js" target="_blank">D3.js - Wikipedia</a></li>
-        </ul>
-    </section>
-</article>
+          </ul>
+        </section>
+      </article>
     </main>
 
     <footer>
